@@ -1,17 +1,18 @@
-class ReservationController < ApplicationController
+class ReservationsController < ApplicationController
     before_action :get_reservations, :get_movie
 
-    # GET /movies/:movie_id/reservations
+    # GET /reservations
     def index
-        render json: { reservations: @reservations, status: :ok }
+        reservations = @reservations.where(date: Date.parse(params[:start])..Date.parse(params[:end]))
+        render json: { reservations: reservations, status: :ok }
     end
     
     # POST /movies/:movie_id/reservation
     def create
         # byebug
-        capacity_exists = @reservations.where(movie_id: reservation_params[:movie_id]).sum(:capacity)
-        movie = @movie.exists?(['day LIKE ?', "%#{Date.strptime(reservation_params[:date], "%A")}%"])
-        if movie
+        capacity_exists = @reservations.where(movie_id: reservation_params[:movie_id], date: reservation_params[:date]).sum(:capacity)
+        day_reservation = Date.parse(reservation_params[:date]).strftime("%A")
+        if @movie.day.include?(day_reservation.downcase)
             if capacity_exists + reservation_params[:capacity] <= 10
                 @reservation = Reservation.new(reservation_params)
                 if @reservation.save
@@ -22,7 +23,7 @@ class ReservationController < ApplicationController
                 render json: { message: "Ops, We have only #{available} available", status: :ok }
             end
         else
-            render json: { message: "Resevation doesn't exist", status: :ok}
+            render json: { message: "Ops, wrong day for reservation", status: :ok}
         end
     end
 
@@ -35,6 +36,6 @@ class ReservationController < ApplicationController
     end
 
     def get_movie
-        @movie = Movie.where(id: reservation_params[:movie_id])
+        @movie = Movie.find_by(id: reservation_params[:movie_id])
     end
 end

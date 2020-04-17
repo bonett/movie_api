@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   resources :movies do
     resources :reservation
   end
+
+  resources :reservations
 end

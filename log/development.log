@@ -3317,3 +3317,889 @@ ArgumentError (invalid date):
   
 app/controllers/reservation_controller.rb:13:in `strptime'
 app/controllers/reservation_controller.rb:13:in `create'
+Started GET "/movies/1/reservation" for ::1 at 2020-04-17 16:50:44 -0500
+  [1m[35m (1.6ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by ReservationController#index as */*
+  Parameters: {"movie_id"=>"1"}
+  [1m[36mReservation Load (0.6ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservation_controller.rb:6:in `index'
+Completed 200 OK in 17ms (Views: 5.7ms | ActiveRecord: 1.6ms | Allocations: 6148)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 16:59:16 -0500
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 500 Internal Server Error in 26ms (ActiveRecord: 0.9ms | Allocations: 2657)
+
+
+  
+ArgumentError (invalid date):
+  
+app/controllers/reservation_controller.rb:13:in `strptime'
+app/controllers/reservation_controller.rb:13:in `create'
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to ChangeColumDateReservation (20200417220014)
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "areservations" ("id" integer NOT NULL PRIMARY KEY, "date" varchar DEFAULT NULL, "capacity" integer DEFAULT NULL, "movie_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE  INDEX "tindex_areservations_on_movie_id" ON "areservations" ("movie_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[32mINSERT INTO "areservations" ("id","date","capacity","movie_id")
+                     SELECT "id","date","capacity","movie_id" FROM "reservations"[0m
+  [1m[35m (1.0ms)[0m  [1m[35mDROP TABLE "reservations"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "reservations" ("id" integer NOT NULL PRIMARY KEY, "date" datetime DEFAULT NULL, "capacity" integer DEFAULT NULL, "movie_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE  INDEX "index_reservations_on_movie_id" ON "reservations" ("movie_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "reservations" ("id","date","capacity","movie_id")
+                     SELECT "id","date","capacity","movie_id" FROM "areservations"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "areservations"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mprimary::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20200417220014"]]
+  [1m[35m (0.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/movies/1/reservation" for ::1 at 2020-04-17 17:01:40 -0500
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by ReservationController#index as */*
+  Parameters: {"movie_id"=>"1"}
+  [1m[36mReservation Load (0.3ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservation_controller.rb:6:in `index'
+Completed 200 OK in 23ms (Views: 11.2ms | ActiveRecord: 1.7ms | Allocations: 5326)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:01:47 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.4ms | Allocations: 980)
+
+
+  
+ArgumentError (invalid date):
+  
+app/controllers/reservation_controller.rb:13:in `strptime'
+app/controllers/reservation_controller.rb:13:in `create'
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:01:49 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 0.4ms | Allocations: 975)
+
+
+  
+ArgumentError (invalid date):
+  
+app/controllers/reservation_controller.rb:13:in `strptime'
+app/controllers/reservation_controller.rb:13:in `create'
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:01:50 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.2ms | Allocations: 957)
+
+
+  
+ArgumentError (invalid date):
+  
+app/controllers/reservation_controller.rb:13:in `strptime'
+app/controllers/reservation_controller.rb:13:in `create'
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:01:56 -0500
+Error occurred while parsing request parameters.
+Contents:
+
+{
+	"movie_id": 1,
+	"date": 2019-08-02,
+	"capacity": 10
+}
+  
+ActionDispatch::Http::Parameters::ParseError (767: unexpected token at '{
+	"movie_id": 1,
+	"date": 2019-08-02,
+	"capacity": 10
+}'):
+  
+actionpack (6.0.2.2) lib/action_dispatch/http/parameters.rb:115:in `rescue in parse_formatted_parameters'
+actionpack (6.0.2.2) lib/action_dispatch/http/parameters.rb:111:in `parse_formatted_parameters'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:381:in `block in POST'
+rack (2.2.2) lib/rack/request.rb:69:in `fetch'
+rack (2.2.2) lib/rack/request.rb:69:in `fetch_header'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:380:in `POST'
+actionpack (6.0.2.2) lib/action_dispatch/http/parameters.rb:55:in `parameters'
+actionpack (6.0.2.2) lib/action_controller/metal/params_wrapper.rb:279:in `_wrapper_enabled?'
+actionpack (6.0.2.2) lib/action_controller/metal/params_wrapper.rb:244:in `process_action'
+activerecord (6.0.2.2) lib/active_record/railties/controller_runtime.rb:27:in `process_action'
+actionpack (6.0.2.2) lib/abstract_controller/base.rb:136:in `process'
+actionpack (6.0.2.2) lib/action_controller/metal.rb:191:in `dispatch'
+actionpack (6.0.2.2) lib/action_controller/metal.rb:252:in `dispatch'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:51:in `dispatch'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:33:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:837:in `call'
+rack (2.2.2) lib/rack/etag.rb:27:in `call'
+rack (2.2.2) lib/rack/conditional_get.rb:40:in `call'
+rack (2.2.2) lib/rack/head.rb:12:in `call'
+activerecord (6.0.2.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.2.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.2) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.2) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.2) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.2) lib/rails/engine.rb:526:in `call'
+puma (4.3.3) lib/puma/configuration.rb:228:in `call'
+puma (4.3.3) lib/puma/server.rb:682:in `handle_request'
+puma (4.3.3) lib/puma/server.rb:472:in `process_client'
+puma (4.3.3) lib/puma/server.rb:328:in `block in run'
+puma (4.3.3) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Error occurred while parsing request parameters.
+Contents:
+
+{
+	"movie_id": 1,
+	"date": 2019-08-02,
+	"capacity": 10
+}
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:02:00 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.2ms | Allocations: 957)
+
+
+  
+ArgumentError (invalid date):
+  
+app/controllers/reservation_controller.rb:13:in `strptime'
+app/controllers/reservation_controller.rb:13:in `create'
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:02:38 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.2ms | Allocations: 957)
+
+
+  
+ArgumentError (invalid date):
+  
+app/controllers/reservation_controller.rb:13:in `strptime'
+app/controllers/reservation_controller.rb:13:in `create'
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mMovie Load (0.8ms)[0m  [1m[34mSELECT "movies".* FROM "movies" ORDER BY "movies"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:18:12 -0500
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (2.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mReservation Load (0.5ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mMovie Load (0.3ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 11]]
+  [1m[36mCACHE Reservation Load (0.0ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mCACHE Movie Load (0.0ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 11]]
+Completed 500 Internal Server Error in 548ms (ActiveRecord: 2.1ms | Allocations: 82259)
+
+
+  [1m[36mCACHE Reservation Load (0.0ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mCACHE Movie Load (0.0ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 11]]
+  
+NameError (undefined local variable or method `movie' for #<ReservationController:0x00007fec250f8f20>
+Did you mean?  @movie):
+  
+app/controllers/reservation_controller.rb:14:in `create'
+  [1m[36mCACHE Reservation Load (0.0ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations" LIMIT ?[0m  [["LIMIT", 11]]
+  [1m[36mCACHE Movie Load (0.0ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 11]]
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:19:21 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 11]]
+Completed 500 Internal Server Error in 53ms (ActiveRecord: 1.4ms | Allocations: 8378)
+
+
+  [1m[36mCACHE Movie Load (0.0ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 11]]
+  
+NoMethodError (undefined method `day' for #<Movie::ActiveRecord_Relation:0x00007fec24955840>):
+  
+app/controllers/reservation_controller.rb:14:in `create'
+  [1m[36mCACHE Movie Load (0.1ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 11]]
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:20:50 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-02", "capacity"=>10, "reservation"=>{"date"=>"2019-08-02", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 22ms (Views: 1.6ms | ActiveRecord: 2.3ms | Allocations: 6615)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:21:05 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-03", "capacity"=>10, "reservation"=>{"date"=>"2019-08-03", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 16ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 1432)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:21:10 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-01", "capacity"=>10, "reservation"=>{"date"=>"2019-08-01", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 8ms (Views: 0.6ms | ActiveRecord: 0.7ms | Allocations: 1432)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:21:14 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-04", "capacity"=>10, "reservation"=>{"date"=>"2019-08-04", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.6ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 8ms (Views: 0.2ms | ActiveRecord: 0.7ms | Allocations: 1433)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:21:17 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-05", "capacity"=>10, "reservation"=>{"date"=>"2019-08-05", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 30ms (Views: 2.5ms | ActiveRecord: 0.3ms | Allocations: 1437)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:21:21 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-06", "capacity"=>10, "reservation"=>{"date"=>"2019-08-06", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.6ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 9ms (Views: 0.2ms | ActiveRecord: 0.7ms | Allocations: 1433)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:21:26 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-07", "capacity"=>10, "reservation"=>{"date"=>"2019-08-07", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 3ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 1432)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:22:05 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-07", "capacity"=>10, "reservation"=>{"date"=>"2019-08-07", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.9ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:39:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 73491ms (Views: 0.6ms | ActiveRecord: 7.4ms | Allocations: 44563)
+
+
+Started GET "/movies" for ::1 at 2020-04-17 17:23:19 -0500
+Processing by MoviesController#index as */*
+  [1m[36mMovie Load (0.9ms)[0m  [1m[34mSELECT "movies".* FROM "movies"[0m
+  ↳ app/controllers/movies_controller.rb:7:in `map'
+Completed 200 OK in 10ms (Views: 0.6ms | ActiveRecord: 0.9ms | Allocations: 847)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:23:34 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-11", "capacity"=>10, "reservation"=>{"date"=>"2019-08-11", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:39:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 21571ms (Views: 0.7ms | ActiveRecord: 0.4ms | Allocations: 3663)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:27:06 -0500
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-11", "capacity"=>10, "reservation"=>{"date"=>"2019-08-11", "capacity"=>10, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 105ms (Views: 0.3ms | ActiveRecord: 5.3ms | Allocations: 6718)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:27:23 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-11", "capacity"=>1, "reservation"=>{"date"=>"2019-08-11", "capacity"=>1, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[36mReservation Create (1.0ms)[0m  [1m[32mINSERT INTO "reservations" ("date", "capacity", "movie_id") VALUES (?, ?, ?)[0m  [["date", "2019-08-11 00:00:00"], ["capacity", 1], ["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+Completed 200 OK in 31ms (Views: 0.5ms | ActiveRecord: 3.9ms | Allocations: 8314)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:27:27 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-11", "capacity"=>1, "reservation"=>{"date"=>"2019-08-11", "capacity"=>1, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.5ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 9ms (Views: 0.3ms | ActiveRecord: 0.9ms | Allocations: 1507)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:28:37 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-15", "capacity"=>5, "reservation"=>{"date"=>"2019-08-15", "capacity"=>5, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 4ms (Views: 0.9ms | ActiveRecord: 0.4ms | Allocations: 1434)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:28:41 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-12", "capacity"=>5, "reservation"=>{"date"=>"2019-08-12", "capacity"=>5, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 11ms (Views: 0.2ms | ActiveRecord: 0.6ms | Allocations: 1507)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:28:56 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-19", "capacity"=>5, "reservation"=>{"date"=>"2019-08-19", "capacity"=>5, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ?[0m  [["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 1507)
+
+
+Started GET "/movies/1/reservation" for ::1 at 2020-04-17 17:32:52 -0500
+Processing by ReservationController#index as */*
+  Parameters: {"movie_id"=>"1"}
+  [1m[36mMovie Load (0.3ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.2ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservation_controller.rb:6:in `index'
+Completed 200 OK in 6ms (Views: 3.5ms | ActiveRecord: 0.6ms | Allocations: 1650)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:34:08 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-19", "capacity"=>5, "reservation"=>{"date"=>"2019-08-19", "capacity"=>5, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ? AND "reservations"."date" = ?[0m  [["movie_id", 1], ["date", "2019-08-19 00:00:00"]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[36mMovie Load (0.3ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[36mReservation Create (0.4ms)[0m  [1m[32mINSERT INTO "reservations" ("date", "capacity", "movie_id") VALUES (?, ?, ?)[0m  [["date", "2019-08-19 00:00:00"], ["capacity", 5], ["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[35m (2.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+Completed 200 OK in 69ms (Views: 0.3ms | ActiveRecord: 8.3ms | Allocations: 13899)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:34:16 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-19", "capacity"=>5, "reservation"=>{"date"=>"2019-08-19", "capacity"=>5, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.3ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ? AND "reservations"."date" = ?[0m  [["movie_id", 1], ["date", "2019-08-19 00:00:00"]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[36mReservation Create (0.8ms)[0m  [1m[32mINSERT INTO "reservations" ("date", "capacity", "movie_id") VALUES (?, ?, ?)[0m  [["date", "2019-08-19 00:00:00"], ["capacity", 5], ["movie_id", 1]]
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+  [1m[35m (3.7ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/reservation_controller.rb:17:in `create'
+Completed 200 OK in 26ms (Views: 0.7ms | ActiveRecord: 5.3ms | Allocations: 4735)
+
+
+Started POST "/movies/1/reservation" for ::1 at 2020-04-17 17:34:18 -0500
+Processing by ReservationController#create as */*
+  Parameters: {"movie_id"=>"1", "date"=>"2019-08-19", "capacity"=>5, "reservation"=>{"date"=>"2019-08-19", "capacity"=>5, "movie_id"=>"1"}}
+[31mUnpermitted parameter: :reservation[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("reservations"."capacity") FROM "reservations" WHERE "reservations"."movie_id" = ? AND "reservations"."date" = ?[0m  [["movie_id", 1], ["date", "2019-08-19 00:00:00"]]
+  ↳ app/controllers/reservation_controller.rb:12:in `create'
+[31mUnpermitted parameter: :reservation[0m
+[31mUnpermitted parameter: :reservation[0m
+Completed 200 OK in 6ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 1621)
+
+
+Started GET "/movies/1/reservation" for ::1 at 2020-04-17 17:34:21 -0500
+Processing by ReservationController#index as */*
+  Parameters: {"movie_id"=>"1"}
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.4ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservation_controller.rb:6:in `index'
+Completed 200 OK in 25ms (Views: 21.7ms | ActiveRecord: 0.6ms | Allocations: 1833)
+
+
+Started GET "/reservations" for ::1 at 2020-04-17 17:40:00 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  
+ActionController::RoutingError (uninitialized constant ReservationsController
+Did you mean?  ReservationController):
+  
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:282:in `const_get'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:282:in `block in constantize'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `each'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `inject'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `constantize'
+activesupport (6.0.2.2) lib/active_support/dependencies/zeitwerk_integration.rb:19:in `constantize'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:88:in `controller_class_for'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:81:in `controller_class'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:45:in `controller'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:31:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:837:in `call'
+rack (2.2.2) lib/rack/etag.rb:27:in `call'
+rack (2.2.2) lib/rack/conditional_get.rb:27:in `call'
+rack (2.2.2) lib/rack/head.rb:12:in `call'
+activerecord (6.0.2.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.2.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.2) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.2) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.2) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.2) lib/rails/engine.rb:526:in `call'
+puma (4.3.3) lib/puma/configuration.rb:228:in `call'
+puma (4.3.3) lib/puma/server.rb:682:in `handle_request'
+puma (4.3.3) lib/puma/server.rb:472:in `process_client'
+puma (4.3.3) lib/puma/server.rb:328:in `block in run'
+puma (4.3.3) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/movies//reservation" for ::1 at 2020-04-17 17:40:23 -0500
+  
+AbstractController::ActionNotFound (The action 'show' could not be found for MoviesController):
+  
+actionpack (6.0.2.2) lib/abstract_controller/base.rb:131:in `process'
+actionpack (6.0.2.2) lib/action_controller/metal.rb:191:in `dispatch'
+actionpack (6.0.2.2) lib/action_controller/metal.rb:252:in `dispatch'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:51:in `dispatch'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:33:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:837:in `call'
+rack (2.2.2) lib/rack/etag.rb:27:in `call'
+rack (2.2.2) lib/rack/conditional_get.rb:27:in `call'
+rack (2.2.2) lib/rack/head.rb:12:in `call'
+activerecord (6.0.2.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.2.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.2) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.2) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.2) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.2) lib/rails/engine.rb:526:in `call'
+puma (4.3.3) lib/puma/configuration.rb:228:in `call'
+puma (4.3.3) lib/puma/server.rb:682:in `handle_request'
+puma (4.3.3) lib/puma/server.rb:472:in `process_client'
+puma (4.3.3) lib/puma/server.rb:328:in `block in run'
+puma (4.3.3) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/movies/1/reservation" for ::1 at 2020-04-17 17:40:28 -0500
+Processing by ReservationController#index as */*
+  Parameters: {"movie_id"=>"1"}
+  [1m[36mMovie Load (0.3ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/reservation_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.5ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservation_controller.rb:6:in `index'
+Completed 200 OK in 31ms (Views: 7.6ms | ActiveRecord: 3.3ms | Allocations: 10147)
+
+
+Started GET "/reservation" for ::1 at 2020-04-17 17:41:50 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/reservation"):
+  
+actionpack (6.0.2.2) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.2) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.2) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.2) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.2) lib/rails/engine.rb:526:in `call'
+puma (4.3.3) lib/puma/configuration.rb:228:in `call'
+puma (4.3.3) lib/puma/server.rb:682:in `handle_request'
+puma (4.3.3) lib/puma/server.rb:472:in `process_client'
+puma (4.3.3) lib/puma/server.rb:328:in `block in run'
+puma (4.3.3) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/reservations" for ::1 at 2020-04-17 17:41:53 -0500
+  
+ActionController::RoutingError (uninitialized constant ReservationsController
+Did you mean?  ReservationController):
+  
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:282:in `const_get'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:282:in `block in constantize'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `each'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `inject'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `constantize'
+activesupport (6.0.2.2) lib/active_support/dependencies/zeitwerk_integration.rb:19:in `constantize'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:88:in `controller_class_for'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:81:in `controller_class'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:45:in `controller'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:31:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:837:in `call'
+rack (2.2.2) lib/rack/etag.rb:27:in `call'
+rack (2.2.2) lib/rack/conditional_get.rb:27:in `call'
+rack (2.2.2) lib/rack/head.rb:12:in `call'
+activerecord (6.0.2.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.2.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.2) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.2) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.2) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.2) lib/rails/engine.rb:526:in `call'
+puma (4.3.3) lib/puma/configuration.rb:228:in `call'
+puma (4.3.3) lib/puma/server.rb:682:in `handle_request'
+puma (4.3.3) lib/puma/server.rb:472:in `process_client'
+puma (4.3.3) lib/puma/server.rb:328:in `block in run'
+puma (4.3.3) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/reservations" for ::1 at 2020-04-17 17:42:13 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  
+ActionController::RoutingError (uninitialized constant ReservationsController
+Did you mean?  ReservationController):
+  
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:282:in `const_get'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:282:in `block in constantize'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `each'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `inject'
+activesupport (6.0.2.2) lib/active_support/inflector/methods.rb:280:in `constantize'
+activesupport (6.0.2.2) lib/active_support/dependencies/zeitwerk_integration.rb:19:in `constantize'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:88:in `controller_class_for'
+actionpack (6.0.2.2) lib/action_dispatch/http/request.rb:81:in `controller_class'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:45:in `controller'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:31:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:49:in `block in serve'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (6.0.2.2) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (6.0.2.2) lib/action_dispatch/routing/route_set.rb:837:in `call'
+rack (2.2.2) lib/rack/etag.rb:27:in `call'
+rack (2.2.2) lib/rack/conditional_get.rb:27:in `call'
+rack (2.2.2) lib/rack/head.rb:12:in `call'
+activerecord (6.0.2.2) lib/active_record/migration.rb:567:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (6.0.2.2) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/debug_exceptions.rb:32:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.2) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.2) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.2) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.2) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.2) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.2) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.2) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+railties (6.0.2.2) lib/rails/engine.rb:526:in `call'
+puma (4.3.3) lib/puma/configuration.rb:228:in `call'
+puma (4.3.3) lib/puma/server.rb:682:in `handle_request'
+puma (4.3.3) lib/puma/server.rb:472:in `process_client'
+puma (4.3.3) lib/puma/server.rb:328:in `block in run'
+puma (4.3.3) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/reservations" for ::1 at 2020-04-17 17:42:42 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationsController#index as */*
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.2ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservations_controller.rb:6:in `index'
+Completed 200 OK in 25ms (Views: 12.6ms | ActiveRecord: 2.8ms | Allocations: 6291)
+
+
+Started GET "/reservations?star=2019-08-02?end=2019-08-02" for ::1 at 2020-04-17 17:44:19 -0500
+Processing by ReservationsController#index as */*
+  Parameters: {"star"=>"2019-08-02?end=2019-08-02"}
+[31mUnpermitted parameter: :star[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.3ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservations_controller.rb:6:in `index'
+Completed 200 OK in 7ms (Views: 2.4ms | ActiveRecord: 0.5ms | Allocations: 1969)
+
+
+Started GET "/reservations?star=2019-08-02end=2019-08-02" for ::1 at 2020-04-17 17:44:38 -0500
+Processing by ReservationsController#index as */*
+  Parameters: {"star"=>"2019-08-02end=2019-08-02"}
+[31mUnpermitted parameter: :star[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.1ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservations_controller.rb:6:in `index'
+Completed 200 OK in 5ms (Views: 1.7ms | ActiveRecord: 0.3ms | Allocations: 1969)
+
+
+Started GET "/reservations?star=2019-08-02" for ::1 at 2020-04-17 17:44:41 -0500
+Processing by ReservationsController#index as */*
+  Parameters: {"star"=>"2019-08-02"}
+[31mUnpermitted parameter: :star[0m
+  [1m[36mMovie Load (0.1ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.1ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservations_controller.rb:6:in `index'
+Completed 200 OK in 3ms (Views: 1.7ms | ActiveRecord: 0.3ms | Allocations: 1969)
+
+
+Started GET "/reservations?start=2019-08-02&end=2019-08-14" for ::1 at 2020-04-17 17:45:40 -0500
+Processing by ReservationsController#index as */*
+  Parameters: {"start"=>"2019-08-02", "end"=>"2019-08-14"}
+[31mUnpermitted parameters: :start, :end[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:38:in `get_movie'
+  [1m[36mReservation Load (0.2ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations"[0m
+  ↳ app/controllers/reservations_controller.rb:6:in `index'
+Completed 200 OK in 7ms (Views: 2.4ms | ActiveRecord: 0.3ms | Allocations: 1970)
+
+
+Started GET "/reservations?start=2019-08-02&end=2019-08-14" for ::1 at 2020-04-17 17:51:45 -0500
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationsController#index as */*
+  Parameters: {"start"=>"2019-08-02", "end"=>"2019-08-14"}
+[31mUnpermitted parameters: :start, :end[0m
+  [1m[36mMovie Load (0.3ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:39:in `get_movie'
+  [1m[36mReservation Load (0.5ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations" WHERE "reservations"."date" BETWEEN ? AND ?[0m  [["date", "2019-08-02"], ["date", "2019-08-14"]]
+  ↳ app/controllers/reservations_controller.rb:7:in `index'
+Completed 200 OK in 50ms (Views: 10.3ms | ActiveRecord: 0.7ms | Allocations: 5746)
+
+
+Started GET "/reservations?start=2019-08-02&end=2019-08-14" for ::1 at 2020-04-17 17:52:02 -0500
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+Processing by ReservationsController#index as */*
+  Parameters: {"start"=>"2019-08-02", "end"=>"2019-08-14"}
+[31mUnpermitted parameters: :start, :end[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:39:in `get_movie'
+  [1m[36mReservation Load (0.3ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations" WHERE "reservations"."date" BETWEEN ? AND ?[0m  [["date", "2019-08-02"], ["date", "2019-08-14"]]
+  ↳ app/controllers/reservations_controller.rb:7:in `index'
+Completed 200 OK in 26ms (Views: 14.6ms | ActiveRecord: 3.0ms | Allocations: 6210)
+
+
+Started GET "/reservations?start=2019-08-14&end=2019-08-30" for ::1 at 2020-04-17 17:52:18 -0500
+Processing by ReservationsController#index as */*
+  Parameters: {"start"=>"2019-08-14", "end"=>"2019-08-30"}
+[31mUnpermitted parameters: :start, :end[0m
+  [1m[36mMovie Load (0.2ms)[0m  [1m[34mSELECT "movies".* FROM "movies" WHERE "movies"."id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/reservations_controller.rb:39:in `get_movie'
+  [1m[36mReservation Load (0.2ms)[0m  [1m[34mSELECT "reservations".* FROM "reservations" WHERE "reservations"."date" BETWEEN ? AND ?[0m  [["date", "2019-08-14"], ["date", "2019-08-30"]]
+  ↳ app/controllers/reservations_controller.rb:7:in `index'
+Completed 200 OK in 7ms (Views: 1.9ms | ActiveRecord: 0.4ms | Allocations: 1803)
+
+

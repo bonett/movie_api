@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_191906) do
+ActiveRecord::Schema.define(version: 2020_04_17_220014) do
 
   create_table "movies", force: :cascade do |t|
     t.string "title"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_191906) do
   end
 
   create_table "reservations", force: :cascade do |t|
-    t.string "date"
+    t.datetime "date"
     t.integer "capacity"
     t.integer "movie_id"
     t.index ["movie_id"], name: "index_reservations_on_movie_id"
